@@ -1,0 +1,93 @@
+{
+  "stadium": {
+    "name": "MetLife Stadium",
+    "city": "East Rutherford, NJ, USA",
+    "capacity": 82500,
+    "address": "1 MetLife Stadium Dr, East Rutherford, NJ 07073"
+  },
+  "gates": [
+    {
+      "id": "A",
+      "name": "Gate A",
+      "direction": "North",
+      "sections": ["101", "102", "103", "104", "105"],
+      "nearestExit": "Exit E1 (North)",
+      "facilities": ["Restroom A1", "Food Court A", "First Aid Post A", "Info Desk A"]
+    },
+    {
+      "id": "B",
+      "name": "Gate B",
+      "direction": "North-West",
+      "sections": ["106", "107", "108", "109"],
+      "nearestExit": "Exit E2 (North-West)",
+      "facilities": ["Restroom B1", "Concession B", "Merchandise Store B"]
+    },
+    {
+      "id": "C",
+      "name": "Gate C",
+      "direction": "South",
+      "sections": ["115", "116", "117", "118", "119"],
+      "nearestExit": "Exit E3 (South)",
+      "facilities": ["Restroom C1", "Restroom C2", "Food Court C", "First Aid Post C"]
+    },
+    {
+      "id": "D",
+      "name": "Gate D",
+      "direction": "South-East",
+      "sections": ["120", "121", "122", "123"],
+      "nearestExit": "Exit E4 (South-East)",
+      "facilities": ["Restroom D1", "Concession D", "Family Zone D"]
+    },
+    {
+      "id": "E",
+      "name": "Gate E",
+      "direction": "East",
+      "sections": ["110", "111", "112", "113", "114"],
+      "nearestExit": "Exit E5 (East)",
+      "facilities": ["Restroom E1", "Food Court E", "Accessible Entry E"]
+    },
+    {
+      "id": "VIP",
+      "name": "VIP Gate",
+      "direction": "West",
+      "sections": ["VIP-1", "VIP-2", "Club Level"],
+      "nearestExit": "Exit VIP-W",
+      "facilities": ["VIP Lounge", "Premium Dining", "Private Restrooms"]
+    }
+  ],
+  "facilities": {
+    "restrooms": [
+      { "id": "R-A1", "gate": "A", "level": 1, "accessible": true },
+      { "id": "R-B1", "gate": "B", "level": 1, "accessible": false },
+      { "id": "R-C1", "gate": "C", "level": 1, "accessible": true },
+      { "id": "R-C2", "gate": "C", "level": 2, "accessible": false },
+      { "id": "R-D1", "gate": "D", "level": 1, "accessible": true },
+      { "id": "R-E1", "gate": "E", "level": 1, "accessible": true }
+    ],
+    "first_aid": [
+      { "id": "FA-A", "gate": "A", "location": "North concourse Level 1" },
+      { "id": "FA-C", "gate": "C", "location": "South concourse Level 1" },
+      { "id": "FA-CENTER", "gate": null, "location": "Section 100 field-level" }
+    ],
+    "emergency_exits": [
+      { "id": "E1", "gate": "A", "direction": "North", "capacity": "high" },
+      { "id": "E2", "gate": "B", "direction": "North-West", "capacity": "medium" },
+      { "id": "E3", "gate": "C", "direction": "South", "capacity": "high" },
+      { "id": "E4", "gate": "D", "direction": "South-East", "capacity": "medium" },
+      { "id": "E5", "gate": "E", "direction": "East", "capacity": "high" },
+      { "id": "E6", "gate": "VIP", "direction": "West", "capacity": "low" }
+    ]
+  },
+  "transport": {
+    "shuttle": { "location": "Lot 7", "frequency_minutes": 10 },
+    "rideshare": { "pickup_zone": "Lot 3" },
+    "train": { "line": "Blue Line", "station": "Stadium Station", "walk_minutes": 5 },
+    "taxi": { "rank": "Gate B South entrance" }
+  },
+  "wifi": {
+    "ssid": "StadiumPulse-Free",
+    "password": null,
+    "coverage": "All seating areas and concourses"
+  },
+  "emergency_contact": "+1-555-STADIUM"
+}

@@ -1,0 +1,35 @@
+{
+  "_comment": "Initial crowd density seeds loaded by store.js at startup. Values 0-100.",
+  "initial_densities": {
+    "A": 45,
+    "B": 30,
+    "C": 62,
+    "D": 28,
+    "E": 71,
+    "VIP": 15
+  },
+  "phase_trends": {
+    "pre-match": {
+      "description": "Crowds arriving — density rises toward kickoff",
+      "drift_per_tick": { "A": 2.5, "B": 1.5, "C": 2.0, "D": 1.0, "E": 3.0, "VIP": 0.5 },
+      "noise_range": 3
+    },
+    "live": {
+      "description": "Match in progress — fans seated, concourse relatively calm",
+      "drift_per_tick": { "A": -0.5, "B": -0.3, "C": -0.5, "D": -0.2, "E": -0.8, "VIP": 0 },
+      "noise_range": 2
+    },
+    "post-match": {
+      "description": "Crowds exiting — congestion spikes at exits",
+      "drift_per_tick": { "A": 1.5, "B": 2.0, "C": 2.5, "D": 1.5, "E": 2.0, "VIP": 0.5 },
+      "noise_range": 4
+    }
+  },
+  "thresholds": {
+    "low": 40,
+    "medium": 70,
+    "high": 85,
+    "alert_on_high": true,
+    "alert_on_critical": true
+  }
+}

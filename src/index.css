@@ -1,0 +1,242 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────── Design Tokens ──────────────────────────────────── */
+:root {
+  --bg-primary:      #020814;
+  --bg-secondary:    #040d1a;
+  --bg-card:         rgba(255, 255, 255, 0.04);
+  --bg-card-hover:   rgba(255, 255, 255, 0.07);
+  --border:          rgba(255, 255, 255, 0.07);
+  --border-blue:     rgba(59, 130, 246, 0.3);
+  --border-gold:     rgba(245, 158, 11, 0.4);
+
+  --accent-blue:     #3b82f6;
+  --accent-gold:     #f59e0b;
+  --accent-green:    #10b981;
+  --accent-red:      #ef4444;
+  --accent-purple:   #8b5cf6;
+  --accent-orange:   #f97316;
+
+  --text-primary:    #f0f4ff;
+  --text-secondary:  #94a3b8;
+  --text-muted:      #475569;
+}
+
+/* ─────────────────────── Base ───────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* ─────────────────────── Scrollbar ─────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.3);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(59, 130, 246, 0.6); }
+
+/* ─────────────────────── Keyframes ─────────────────────────────────────── */
+@keyframes pulse-ring {
+  0%   { transform: scale(1);   opacity: 0.8; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33%       { transform: translateY(-8px) rotate(1deg); }
+  66%       { transform: translateY(-4px) rotate(-1deg); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes slide-in-right {
+  from { transform: translateX(40px); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
+@keyframes slide-in-up {
+  from { transform: translateY(24px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+@keyframes glow-critical {
+  0%, 100% { box-shadow: 0 0 12px rgba(239, 68, 68, 0.3), 0 0 0 1px rgba(239,68,68,0.2); }
+  50%       { box-shadow: 0 0 30px rgba(239, 68, 68, 0.7), 0 0 0 2px rgba(239,68,68,0.5); }
+}
+
+@keyframes glow-warning {
+  0%, 100% { box-shadow: 0 0 12px rgba(245, 158, 11, 0.3); }
+  50%       { box-shadow: 0 0 25px rgba(245, 158, 11, 0.6); }
+}
+
+@keyframes count-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0)   scale(1); }
+}
+
+@keyframes bar-fill {
+  from { width: 0%; }
+}
+
+@keyframes rotate-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes dash-stroke {
+  from { stroke-dashoffset: 1000; }
+  to   { stroke-dashoffset: 0; }
+}
+
+/* ─────────────────────── Utility Classes ───────────────────────────────── */
+
+/* Glassmorphism card */
+.glass-card {
+  background:    var(--bg-card);
+  border:        1px solid var(--border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 16px;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.glass-card:hover {
+  background:    var(--bg-card-hover);
+  border-color:  var(--border-blue);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #60a5fa 0%, #f59e0b 60%, #f0f4ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-blue {
+  background: linear-gradient(135deg, #93c5fd 0%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Shimmer loading */
+.shimmer {
+  background: linear-gradient(90deg,
+    rgba(255,255,255,0.03) 25%,
+    rgba(255,255,255,0.08) 50%,
+    rgba(255,255,255,0.03) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s infinite;
+}
+
+/* Live pulse dot */
+.live-dot {
+  position: relative;
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--accent-green);
+}
+.live-dot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-color: var(--accent-green);
+  animation: pulse-ring 1.8s ease-out infinite;
+}
+
+/* Density bar */
+.density-bar-wrap {
+  background: rgba(255,255,255,0.06);
+  border-radius: 999px;
+  overflow: hidden;
+  height: 6px;
+}
+.density-bar {
+  height: 100%;
+  border-radius: 999px;
+  animation: bar-fill 1s ease-out both;
+  transition: width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Alert glow states */
+.alert-critical { animation: glow-critical 2s ease-in-out infinite; }
+.alert-warning  { animation: glow-warning  2.5s ease-in-out infinite; }
+
+/* Animated entry */
+.animate-slide-in  { animation: slide-in-right 0.4s ease-out both; }
+.animate-slide-up  { animation: slide-in-up   0.5s ease-out both; }
+.animate-count-in  { animation: count-in      0.6s ease-out both; }
+
+/* Stadium mesh background */
+.stadium-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%,  rgba(59, 130, 246, 0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 80% 80%,  rgba(139, 92, 246, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 10% 70%,  rgba(245, 158, 11, 0.06) 0%, transparent 60%);
+}
+
+/* Grid overlay */
+.grid-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ─────────────────────── Focus styles (accessibility) ───────────────────── */
+:focus-visible {
+  outline: 3px solid var(--accent-blue) !important;
+  outline-offset: 2px !important;
+  border-radius: 4px !important;
+}
+
+button:focus-visible, a:focus-visible, [role="button"]:focus-visible, [tabindex="0"]:focus-visible {
+  outline: 3px solid var(--accent-gold) !important;
+  outline-offset: 2px !important;
+}
+
+/* Hide default details marker to use custom arrow in summary */
+summary::-webkit-details-marker {
+  display: none;
+}
+summary {
+  list-style: none;
+}
+details[open] summary span {
+  transform: rotate(90deg) !important;
+}
+
+/* ─────────────────────── Transitions ───────────────────────────────────── */
+.transition-all-smooth {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}

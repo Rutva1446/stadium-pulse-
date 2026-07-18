@@ -1,0 +1,50 @@
+{
+  "current_match": {
+    "id": "WC2026-SF1",
+    "stage": "Semi-Final",
+    "home_team": {
+      "name": "Brazil",
+      "code": "BRA",
+      "flag_emoji": "🇧🇷",
+      "color": "#009c3b"
+    },
+    "away_team": {
+      "name": "France",
+      "code": "FRA",
+      "flag_emoji": "🇫🇷",
+      "color": "#0055a4"
+    },
+    "kickoff_utc": "2026-07-10T23:30:00Z",
+    "kickoff_local": "2026-07-10T19:00:00-04:00",
+    "venue": "MetLife Stadium",
+    "referee": "Stéphanie Frappart (FRA)",
+    "phase": "pre-match",
+    "score": { "home": 0, "away": 0 },
+    "minute": 0
+  },
+  "upcoming": [
+    {
+      "id": "WC2026-SF2",
+      "stage": "Semi-Final",
+      "home_team": { "name": "Argentina", "code": "ARG", "flag_emoji": "🇦🇷" },
+      "away_team": { "name": "England", "code": "ENG", "flag_emoji": "🏴󠁧󠁢󠁥󠁮󠁧󠁿" },
+      "kickoff_local": "2026-07-11T19:00:00-04:00",
+      "venue": "AT&T Stadium"
+    },
+    {
+      "id": "WC2026-F1",
+      "stage": "Final",
+      "home_team": { "name": "TBD", "code": "TBD", "flag_emoji": "🏆" },
+      "away_team": { "name": "TBD", "code": "TBD", "flag_emoji": "🏆" },
+      "kickoff_local": "2026-07-19T19:00:00-04:00",
+      "venue": "MetLife Stadium"
+    }
+  ],
+  "event_info": {
+    "tournament": "FIFA World Cup 2026",
+    "host_countries": ["USA", "Canada", "Mexico"],
+    "edition": "23rd FIFA World Cup",
+    "total_matches": 104,
+    "participating_teams": 48
+  }
+}
