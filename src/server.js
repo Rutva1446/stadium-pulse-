@@ -17,6 +17,10 @@ const ticketRoutes        = require('./routes/tickets');
 const app  = express();
 const PORT = process.env.PORT || 3001;
 
+// Render (and most hosting platforms) sit behind a reverse proxy that sets
+// X-Forwarded-For. Trusting the first proxy hop lets express-rate-limit and
+// req.ip correctly identify the real client IP instead of the proxy's IP.
+app.set('trust proxy', 1);
 // ── Security middleware ───────────────────────────────────────────────────────
 // contentSecurityPolicy is relaxed slightly because we serve the React app +
 // Google Fonts from this same server; other helmet protections stay enabled.
