@@ -7,6 +7,10 @@
 > context-aware, real-time recommendations for **Fans**, **Staff**, and **Security** at MetLife Stadium.
 
 ---
+### 🔗 [Live Demo](https://stadium-pulse-3.onrender.com)
+
+> **Note:** Hosted on Render's free tier — if the app hasn't been visited in 15+ minutes, 
+> the first load may take 30–60 seconds to wake up. Please wait for it to load fully.
 
 ## Problem Statement
 
