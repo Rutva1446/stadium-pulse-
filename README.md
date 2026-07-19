@@ -3,14 +3,15 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
+### 🔗 [Live Demo](https://stadium-pulse-3.onrender.com)
+
+> **Note:** Hosted on Render's free tier — if the app hasn't been visited in 15+ minutes,
+> the first load may take 30–60 seconds to wake up. Please wait for it to load fully.
+
 > A full-stack AI-powered operations assistant for large-scale stadium events. Delivers
 > context-aware, real-time recommendations for **Fans**, **Staff**, and **Security** at MetLife Stadium.
 
 ---
-### 🔗 [Live Demo](https://stadium-pulse-3.onrender.com)
-
-> **Note:** Hosted on Render's free tier — if the app hasn't been visited in 15+ minutes, 
-> the first load may take 30–60 seconds to wake up. Please wait for it to load fully.
 
 ## Problem Statement
 
@@ -20,35 +21,37 @@ Managing 82,500 fans at a FIFA World Cup match creates extreme operational compl
 
 ## Architecture Overview
 
+StadiumPulse runs as a **single Node.js service**: Express serves both the JSON API and the built React frontend from one process, one port, and one deploy target — no separate frontend/backend hosting required.
+
 ```
-stadiumPulse/
-├── backend/                    # Node.js + Express API
-│   ├── src/
-│   │   ├── assistant/
-│   │   │   └── engine.js       ← ⭐ CORE DECISION ENGINE (pure function)
-│   │   ├── data/
-│   │   │   └── store.js        ← In-memory store + 15s simulation timer
-│   │   ├── routes/
-│   │   │   ├── assistant.js    ← POST /api/assistant
-│   │   │   ├── dashboard.js    ← GET  /api/dashboard
-│   │   │   └── incident.js     ← POST /api/incident
-│   │   └── server.js           ← Express server (helmet, cors, rate-limit)
-│   └── tests/
-│       └── engine.test.js      ← Jest unit tests (30+ cases)
-├── frontend/                   # Vite + React + Tailwind CSS v3
-│   └── src/
-│       ├── views/              ← LandingView, FanView, StaffView, SecurityView
-│       ├── components/         ← Navbar, AssistantPanel, GateStatusCard, AlertFeed…
-│       ├── hooks/              ← useLiveData (polling), useAssistant, useIncident
-│       └── context/            ← AppContext (role state), I18nContext (EN/ES)
-└── data/                       ← venue.json, matches.json, crowd_sim.json
+stadium-pulse/
+├── src/
+│   ├── server.js               ← Express entry point (helmet, cors, compression, rate-limit)
+│   ├── assistant/
+│   │   └── engine.js           ← ⭐ CORE DECISION ENGINE (pure function)
+│   ├── data/
+│   │   └── store.js            ← In-memory store + 15s crowd simulation timer
+│   ├── routes/
+│   │   ├── assistant.js        ← POST /api/assistant
+│   │   ├── dashboard.js        ← GET  /api/dashboard
+│   │   ├── incident.js         ← POST /api/incident
+│   │   └── tickets.js          ← GET/POST /api/tickets
+│   ├── views/                  ← LandingView, FanView, StaffView, SecurityView (React)
+│   ├── components/             ← Navbar, AssistantPanel, GateStatusCard, AlertFeed…
+│   ├── hooks/                  ← useLiveData (visibility-aware polling), useAssistant, useIncident
+│   └── context/                ← AppContext (role state), I18nContext (EN/ES)
+├── data/                        ← venue.json, matches.json, crowd_sim.json, tickets.json
+├── tests/
+│   └── engine.test.js           ← Jest unit tests (30+ cases)
+├── vite.config.js
+└── package.json                 ← single dependency tree for backend + frontend
 ```
 
 ---
 
 ## How the Assistant Makes Decisions
 
-The core module is `backend/src/assistant/engine.js` — a **pure function** with no side effects, making every decision fully testable.
+The core module is `src/assistant/engine.js` — a **pure function** with no side effects, making every decision fully testable.
 
 ```js
 recommend(context) → { recommendations[], alertLevel, actions[], qaAnswer, source }
@@ -79,48 +82,45 @@ context = { role: 'staff', eventPhase: 'pre-match', crowdDensity: 91, location: 
 → Layer 2: alertLevel = 'critical'
 → Layer 3: ROLE_PHASE_RULES['staff']['pre-match']['critical']
 → Output: ["🔴 CRITICAL: Halt entry at Gate A. Divert fans to Gates B–D.", ...]
-→ Layer 5: actions = [{ type: 'alert', priority: 'critical' }, { type: 'notify', target: 'command_center' }]
+→ actions = [{ type: 'alert', priority: 'critical' }, { type: 'notify', target: 'command_center' }]
 ```
 
 ---
 
 ## Setup & Run Instructions
 
+> 💡 You can try the [live demo](https://stadium-pulse-3.onrender.com) above without any setup — or follow the steps below to run it locally.
+
 ### Prerequisites
 - **Node.js** ≥ 18
 - **npm** ≥ 9
 
-### 1. Clone / Download
+### 1. Clone
 ```bash
-git clone https://github.com/YOUR_USERNAME/stadiumPulse.git
-cd stadiumPulse
+git clone https://github.com/Rutva1446/stadium-pulse-.git
+cd stadium-pulse-
 ```
 
-### 2. Backend
+### 2. Install & build
 ```bash
-cd backend
 npm install
 cp .env.example .env    # optional — defaults work out of the box
-npm start
-# API running at http://localhost:3001
+npm run build            # builds the React frontend into /dist
 ```
 
-### 3. Frontend (new terminal)
+### 3. Run
 ```bash
-cd frontend
-npm install
-npm run dev
-# App running at http://localhost:5173
+npm start
+# Full app (API + frontend) running at http://localhost:3001
 ```
 
-Open **http://localhost:5173** in your browser.
+Open **http://localhost:3001** in your browser.
 
 ---
 
 ## Running Tests
 
 ```bash
-cd backend
 npm test
 ```
 
@@ -134,11 +134,13 @@ Output: 30+ Jest unit tests covering the decision engine — density classificat
 |---|---|
 | **Pure function engine** | Zero side effects → trivially unit-testable; evaluators can trace every decision |
 | **Layered rules (not flat if/else)** | Rules are modular, independent, and extensible — adding a new rule type doesn't require touching existing layers |
+| **Single Express service serves frontend + API** | One process, one deploy target, no CORS complexity — Express serves the built React app directly from `/dist` |
 | **In-memory store + setInterval** | No database dependency for the demo; crowd data updates every 15s without WebSockets |
-| **Frontend polling (10s)** | Simple, reliable, works through any proxy — no WebSocket complexity |
+| **Visibility-aware polling (10s)** | Frontend pauses its poll when the browser tab is backgrounded and resumes on return — avoids wasted requests |
+| **Gzip compression + immutable asset caching** | Vite's content-hashed bundles are cached for 1 year client-side; JS bundle transfers ~70% smaller over the wire |
 | **Vite + React** | Component reuse across 3 role views; fast HMR for development |
 | **Tailwind CSS v3** | Utility classes tree-shaken at build time → minimal CSS bundle |
-| **Helmet + rate-limit** | Basic production-grade security from day one |
+| **Helmet + CORS + rate-limit + trust proxy** | Production-grade security from day one, correctly configured for deployment behind Render's reverse proxy |
 
 ---
 
@@ -151,6 +153,7 @@ Output: 30+ Jest unit tests covering the decision engine — density classificat
 | `POST` | `/api/dashboard/phase` | Advance event phase (demo) |
 | `POST` | `/api/dashboard/alerts/:id/acknowledge` | Acknowledge an alert |
 | `POST` | `/api/incident` | Report incident + get AI guidance |
+| `GET/POST` | `/api/tickets` | Ticket/seat lookup |
 | `GET`  | `/api/health` | Health check |
 
 ---
