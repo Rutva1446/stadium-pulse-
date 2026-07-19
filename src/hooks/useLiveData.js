@@ -29,9 +29,26 @@ export function useLiveData(intervalMs = 10000) {
   useEffect(() => {
     fetchData();
     timerRef.current = setInterval(fetchData, intervalMs);
-    return () => clearInterval(timerRef.current);
-  }, [fetchData, intervalMs]);
 
+    // Pause polling when the tab isn't visible (backgrounded/minimized) —
+    // avoids unnecessary network requests and server load while nobody is
+    // watching, then does one immediate refresh + resumes polling on return.
+    const handleVisibility = () => {
+      if (document.hidden) {
+        clearInterval(timerRef.current);
+      } else {
+        fetchData();
+        timerRef.current = setInterval(fetchData, intervalMs);
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+
+    return () => {
+      clearInterval(timerRef.current);
+      document.removeEventListener('visibilitychange', handleVisibility);
+    };
+  }, [fetchData, intervalMs]);
+  
   return { data, loading, error, refetch: fetchData };
 }
 
