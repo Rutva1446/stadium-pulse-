@@ -2,11 +2,12 @@
 
 require('dotenv').config();
 
-const path      = require('path');
-const express   = require('express');
-const cors      = require('cors');
-const helmet    = require('helmet');
-const rateLimit = require('express-rate-limit');
+const path        = require('path');
+const express     = require('express');
+const cors        = require('cors');
+const helmet      = require('helmet');
+const compression = require('compression');
+const rateLimit   = require('express-rate-limit');
 
 const { startSimulation } = require('./data/store');
 const assistantRoutes     = require('./routes/assistant');
@@ -21,6 +22,11 @@ const PORT = process.env.PORT || 3001;
 // X-Forwarded-For. Trusting the first proxy hop lets express-rate-limit and
 // req.ip correctly identify the real client IP instead of the proxy's IP.
 app.set('trust proxy', 1);
+
+// Gzip-compress all responses (API JSON + static assets) — smaller payloads,
+// faster load, less bandwidth. Standard, low-risk resource-efficiency win.
+app.use(compression());
+
 // ── Security middleware ───────────────────────────────────────────────────────
 // contentSecurityPolicy is relaxed slightly because we serve the React app +
 // Google Fonts from this same server; other helmet protections stay enabled.
@@ -63,7 +69,19 @@ app.get('/api/health', (_req, res) =>
 // ── Serve the built React frontend ─────────────────────────────────────────────
 // vite build outputs to /dist at the project root (one level up from /src).
 const distPath = path.join(__dirname, '..', 'dist');
-app.use(express.static(distPath));
+app.use(express.static(distPath, {
+  // Vite fingerprints filenames with a content hash, so these files never
+  // change under the same name — safe to cache aggressively on the client.
+  maxAge: '1y',
+  immutable: true,
+  setHeaders: (res, filePath) => {
+    // index.html itself must always be revalidated (it references the
+    // current hashed bundle), everything else can be cached long-term.
+    if (filePath.endsWith('index.html')) {
+      res.setHeader('Cache-Control', 'no-cache');
+    }
+  },
+}));
 
 // Any non-/api route falls through to index.html so React Router (if used)
 // and direct page loads/refreshes both work correctly.
